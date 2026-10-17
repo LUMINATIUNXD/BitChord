@@ -132,6 +132,7 @@ internal fun AudioOutputSheet(
 
         Spacer(Modifier.height(6.dp))
         AudioPipelineRow(onClick = onOpenPipeline)
+        PlayerPlatform.host.OutputExtras()
     }
 }
 
