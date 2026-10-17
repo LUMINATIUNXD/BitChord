@@ -135,6 +135,9 @@ class AndroidPlayerHost(context: Context) : PlayerHost {
         WearBridge.selectWatchOutput()
     }
 
+    @Composable
+    override fun OutputExtras() = BudsOutputPanel()
+
     override val outputFormat: StateFlow<OutputFormatUi> by lazy {
         AudioOutputStatus.current
             .map { it.toOutputFormat() }
