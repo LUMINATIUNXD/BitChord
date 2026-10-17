@@ -145,9 +145,10 @@ class AndroidPlayerHost(context: Context) : PlayerHost {
     @Composable
     override fun OutputExtrasPainter(): Painter? {
         val status by AudioOutputStatus.current.collectAsStateWithLifecycle()
-        return when (status.bluetoothTelemetry?.deviceProfile?.family) {
-            DeviceFamily.GALAXY_BUDS2 -> painterResource(R.drawable.buds2)
-            DeviceFamily.GALAXY_BUDS3_PRO -> painterResource(R.drawable.buds3_pro)
+        val family = status.bluetoothTelemetry?.deviceProfile?.family
+        return when {
+            family == DeviceFamily.GALAXY_BUDS3_PRO -> painterResource(R.drawable.buds3_pro)
+            family?.isGalaxyBuds == true -> painterResource(R.drawable.buds2)
             else -> null
         }
     }

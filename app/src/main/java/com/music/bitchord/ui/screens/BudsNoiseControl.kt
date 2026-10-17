@@ -34,32 +34,34 @@ private fun findBuds(context: Context, family: DeviceFamily): BluetoothDevice? {
     return adapter.bondedDevices.firstOrNull { DeviceRegistry.identify(it.name)?.family == family }
 }
 
-/** Se dibuja solo si el dispositivo conectado es Buds2 o Buds3 Pro. */
+/** Controles de ruido disponibles para el modelo Galaxy Buds conectado. */
 @Composable
 fun BudsNoiseControlSection(profile: DeviceProfile?) {
     if (profile == null) return
-    if (profile.family != DeviceFamily.GALAXY_BUDS2 && profile.family != DeviceFamily.GALAXY_BUDS3_PRO) return
+    if (!profile.family.isGalaxyBuds || !profile.family.supportsAnyNoiseControl) return
 
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    var selected by remember { mutableStateOf<Byte?>(null) }
-    var message by remember { mutableStateOf<String?>(null) }
-    var pendingMode by remember { mutableStateOf<Byte?>(null) }
+    var selected by remember(profile.family) { mutableStateOf<Byte?>(null) }
+    var message by remember(profile.family) { mutableStateOf<String?>(null) }
+    var pendingMode by remember(profile.family) { mutableStateOf<Byte?>(null) }
 
     fun sendMode(mode: Byte) {
         scope.launch {
             val ok = withContext(Dispatchers.IO) {
-                if (!GalaxyBudsManager.isConnectedToHardware) {
-                    val device = findBuds(context, profile.family) ?: return@withContext false
-                    if (!GalaxyBudsManager.connectToHardware(device)) return@withContext false
+                val device = findBuds(context, profile.family) ?: return@withContext false
+                if (!GalaxyBudsManager.isConnectedTo(device, profile.family) &&
+                    !GalaxyBudsManager.connectToHardware(device, profile.family)
+                ) {
+                    return@withContext false
                 }
-                GalaxyBudsManager.setNoiseControlMode(mode)
+                GalaxyBudsManager.setNoiseControlMode(mode, profile.family)
             }
             if (ok) {
                 selected = mode
                 message = null
             } else {
-                message = "No se pudo conectar a los Buds. Cierra Galaxy Wearable e intenta de nuevo."
+                message = "No se pudo conectar o aplicar el cambio. Cierra Galaxy Wearable e intenta de nuevo."
             }
         }
     }
@@ -83,31 +85,26 @@ fun BudsNoiseControlSection(profile: DeviceProfile?) {
         }
     }
 
+    val modes = buildList {
+        add("Apagado" to GalaxyBudsManager.NoiseControl.OFF)
+        if (profile.family.supportsAnc) add("Cancelación de ruido (ANC)" to GalaxyBudsManager.NoiseControl.ANC)
+        if (profile.family.supportsAmbientMode) add("Sonido ambiente" to GalaxyBudsManager.NoiseControl.AMBIENT)
+        if (profile.family.supportsAdaptiveMode) add("Cancelación adaptativa" to GalaxyBudsManager.NoiseControl.ADAPTIVE)
+    }
+
     SettingsGroup(
-        footer = message ?: "Control directo por Bluetooth. El estado actual se conoce hasta que elijas un modo.",
+        footer = message ?: "Control Bluetooth. El estado se conoce después de elegir un modo.",
         topSpacing = 8.dp,
     ) {
         SettingsRow(icon = Icons.Rounded.Headset, title = profile.displayName)
-        RowDivider()
-        ChoiceRow(
-            label = "Apagado",
-            selected = selected == GalaxyBudsManager.NoiseControl.OFF,
-            onClick = { request(GalaxyBudsManager.NoiseControl.OFF) },
-            enabled = true,
-        )
-        RowDivider()
-        ChoiceRow(
-            label = "Cancelación de ruido (ANC)",
-            selected = selected == GalaxyBudsManager.NoiseControl.ANC,
-            onClick = { request(GalaxyBudsManager.NoiseControl.ANC) },
-            enabled = true,
-        )
-        RowDivider()
-        ChoiceRow(
-            label = "Sonido ambiente",
-            selected = selected == GalaxyBudsManager.NoiseControl.AMBIENT,
-            onClick = { request(GalaxyBudsManager.NoiseControl.AMBIENT) },
-            enabled = true,
-        )
+        modes.forEach { (label, mode) ->
+            RowDivider()
+            ChoiceRow(
+                label = label,
+                selected = selected == mode,
+                onClick = { request(mode) },
+                enabled = true,
+            )
+        }
     }
 }
