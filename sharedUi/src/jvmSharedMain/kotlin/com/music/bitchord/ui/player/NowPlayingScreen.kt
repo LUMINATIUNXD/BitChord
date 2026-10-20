@@ -1022,6 +1022,7 @@ fun NowPlayingScreen(
     // back has to close it first rather than taking the drawer out from
     // under it.
     PlayerBackHandler(enabled = showAudioOutput) { showAudioOutput = false }
+    PlayerBackHandler(enabled = com.music.bitchord.ui.player.OutputExtrasUi.open) { com.music.bitchord.ui.player.OutputExtrasUi.open = false }
 
     PlayerBackHandler(enabled = showLyricsProviders) { showLyricsProviders = false }
 
@@ -1523,6 +1524,12 @@ fun NowPlayingScreen(
     // whichever layout is on screen — they are overlays over the player, not
     // part of either shape of it.
     val playerOverlays: @Composable () -> Unit = {
+        if (com.music.bitchord.ui.player.OutputExtrasUi.open) {
+            com.music.bitchord.ui.player.OutputExtrasSheet(
+                hazeState = playerHaze,
+                onDismiss = { com.music.bitchord.ui.player.OutputExtrasUi.open = false },
+            )
+        }
         if (showAudioOutput) {
             AudioOutputSheet(
                 hazeState = playerHaze,
