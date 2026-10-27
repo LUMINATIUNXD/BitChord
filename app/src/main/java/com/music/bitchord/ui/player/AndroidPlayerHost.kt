@@ -45,6 +45,9 @@ import kotlin.math.roundToInt
  * moved into the shared module.
  */
 class AndroidPlayerHost(context: Context) : PlayerHost {
+    @Composable
+    override fun OutputExtras() = BudsOutputPanel()
+
     private val app = context.applicationContext
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     private val main = Handler(Looper.getMainLooper())

@@ -30,6 +30,10 @@ import kotlinx.coroutines.flow.StateFlow
  * [PlayerPlatform.install] before the player is first drawn.
  */
 interface PlayerHost {
+    /** Controls supplied by a platform for its active output, absent elsewhere. */
+    @Composable
+    fun OutputExtras() = Unit
+
     val settings: PlayerSettingsSource
 
     /** A Canvas already settled for [song], without a lookup. */

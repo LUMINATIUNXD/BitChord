@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="buds_controls">Controles de Galaxy Buds</string>
+    <string name="buds_connect">Conectar controles</string>
+    <string name="buds_connecting">Conectando…</string>
+    <string name="buds_permission">Permite el acceso a Bluetooth para controlar tus audífonos.</string>
+    <string name="buds_failed">No se pudo conectar o enviar el cambio. Comprueba que los audífonos estén conectados e inténtalo otra vez.</string>
+    <string name="buds_connected">Controles conectados. Enviar un comando no confirma el ajuste del audífono.</string>
+    <string name="buds_noise_unknown">Esperando el ajuste de ruido de los audífonos.</string>
+    <string name="buds_off">Apagado</string>
+    <string name="buds_anc">ANC</string>
+    <string name="buds_ambient">Ambiente</string>
+    <string name="buds_adaptive">Adaptativo</string>
+    <string name="buds_equalizer">Ecualizador de los audífonos</string>
+    <string name="buds_eq_normal">Normal</string>
+    <string name="buds_eq_bass">Refuerzo de graves</string>
+    <string name="buds_eq_soft">Suave</string>
+    <string name="buds_eq_dynamic">Dinámico</string>
+    <string name="buds_eq_clear">Claro</string>
+    <string name="buds_eq_treble">Refuerzo de agudos</string>
+</resources>

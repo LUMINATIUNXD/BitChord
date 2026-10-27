@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="buds_controls">Galaxy Buds controls</string>
+    <string name="buds_connect">Connect controls</string>
+    <string name="buds_connecting">Connecting…</string>
+    <string name="buds_permission">Allow Bluetooth access to control your earbuds.</string>
+    <string name="buds_failed">Could not connect or send the change. Check that your earbuds are connected and try again.</string>
+    <string name="buds_connected">Controls connected. A sent command does not confirm the earbud setting.</string>
+    <string name="buds_noise_unknown">Waiting for the noise control setting from the earbuds.</string>
+    <string name="buds_off">Off</string>
+    <string name="buds_anc">ANC</string>
+    <string name="buds_ambient">Ambient</string>
+    <string name="buds_adaptive">Adaptive</string>
+    <string name="buds_equalizer">Earbud equalizer</string>
+    <string name="buds_eq_normal">Normal</string>
+    <string name="buds_eq_bass">Bass boost</string>
+    <string name="buds_eq_soft">Soft</string>
+    <string name="buds_eq_dynamic">Dynamic</string>
+    <string name="buds_eq_clear">Clear</string>
+    <string name="buds_eq_treble">Treble boost</string>
+</resources>
